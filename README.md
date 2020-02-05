@@ -18,7 +18,8 @@
 
 - `docker-compose exec postgres psql -U drdoom -d pgsockets`
 - `LISTEN new_country_channel;`
-- ```sql
+-
+```sql
 insert into country (
   code, name, continent, region, surfacearea, population,
   localname, governmentform, code2
