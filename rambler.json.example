@@ -1,0 +1,11 @@
+{
+  "driver": "postgresql",
+  "protocol": "tcp",
+  "host": "localhost",
+  "port": 5432,
+  "user": "drdoom",
+  "password": "pgsockets",
+  "database": "pgsockets",
+  "directory": "./migrations",
+  "table": "migrations"
+}

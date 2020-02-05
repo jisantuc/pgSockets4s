@@ -1,0 +1,36 @@
+#!/bin/bash
+
+DIR="$(dirname "$0")"
+
+function usage() {
+
+    echo -n \
+"Usage: $(basename "$0") [--download]
+
+Load the world database from doobie examples:
+https://tpolecat.github.io/doobie/docs/01-Introduction.html
+"
+}
+
+function download_database() {
+    pushd "${DIR}/.."
+
+    wget -O data/world.sql \
+	 https://raw.githubusercontent.com/tpolecat/doobie/series/0.7.x/world.sql
+}
+
+function initdb() {
+    psql -q -U drdoom -d pgsockets -h localhost -p 5432 < data/world.sql
+}
+
+if [ "${BASH_SOURCE[0]}" = "${0}" ]
+then
+    if [ "${1:-}" = "--help" ]
+    then
+        usage
+    else
+	download_database
+	initdb
+    fi
+    exit
+fi
