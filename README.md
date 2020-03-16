@@ -17,15 +17,13 @@
 ### Prove you're all set
 
 - `docker-compose exec postgres psql -U pgsockets -d pgsockets`
-- `LISTEN new_country_channel;`
+- `LISTEN new_city_channel;`
 -
 ```sql
-insert into country (
-  code, name, continent, region, surfacearea, population,
-  localname, governmentform, code2
+insert into city (
+  id, name, countrycode, district, population
 ) values (
-  'NEW', 'New Land', 'Asia', 'South Asia', 1234.5, 1234, 'New Land',
-  'constitutional monarchy', 'NE'
+  4080, 'New City Great Place', 'ABC', 'Good Place District', 12345
 );
 ```
 - observe the async notification that gets logged
