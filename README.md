@@ -16,7 +16,7 @@
 
 ### Prove you're all set
 
-- `docker-compose exec postgres psql -U drdoom -d pgsockets`
+- `docker-compose exec postgres psql -U pgsockets -d pgsockets`
 - `LISTEN new_country_channel;`
 -
 ```sql
