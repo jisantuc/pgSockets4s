@@ -1,0 +1,41 @@
+#!/bin/bash
+
+set -e
+
+if [[ -n "${PGSOCKETS4S_DEBUG}" ]]; then
+    set -x
+fi
+
+if [[ -n "${GIT_COMMIT}" ]]; then
+    GIT_COMMIT="${GIT_COMMIT:0:7}"
+else
+    GIT_COMMIT="$(git rev-parse --short HEAD)"
+fi
+
+function usage() {
+    echo -n \
+"Usage: $(basename "$0")
+
+Build application for staging or a release.
+"
+}
+
+function build_assembly() {
+    echo -e "\e[32m[pgsockets4s] Building Scala assembly JAR\e[0m"
+    sbt application/assembly
+}
+
+
+if [ "${BASH_SOURCE[0]}" = "${0}" ]; then
+    case "${1}" in
+        --help)
+            usage
+            ;;
+        *)
+            ./scripts/tests
+
+            build_assembly
+            echo -e "\e[32m[pgsockets4s] Building scala container image\e[0m"
+            docker build -t "pgsockets4s:${GIT_COMMIT}" application
+    esac
+fi

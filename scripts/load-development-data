@@ -20,7 +20,7 @@ function download_database() {
 }
 
 function initdb() {
-    psql -q -U pgsockets -d pgsockets -h localhost -p 5432 < data/world.sql
+    psql -q -U pgsockets4s -d pgsockets4s -h localhost -p 5432 < data/world.sql
 }
 
 if [ "${BASH_SOURCE[0]}" = "${0}" ]

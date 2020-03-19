@@ -1,0 +1,30 @@
+#!/bin/bash
+
+set -e
+
+if [[ -n "${PGSOCKETS4S_DEBUG}" ]]; then
+    set -x
+fi
+
+function usage() {
+    echo -n \
+         "Usage: $(basename "$0") [flyway command]
+
+Runs app-backend migrations via rambler CLI
+
+Available rambler commands are apply|reverse|help
+
+"
+}
+
+if [ "${BASH_SOURCE[0]}" = "${0}" ]
+then
+    case "${1}" in
+        --help)
+            usage
+            ;;
+        *)
+            echo -e "\e[32m[pgsockets4s] Running migrations\e[0m"
+            rambler "$@"
+    esac
+fi

@@ -1,0 +1,30 @@
+#!/bin/bash
+
+set -e
+
+
+if [[ -n "${PGSOCKETS4S_DEBUG}" ]]; then
+    set -x
+fi
+
+function usage() {
+    echo -n \
+         "Usage: $(basename "$0")
+
+Starts servers using docker-compose.
+"
+}
+
+
+if [ "${BASH_SOURCE[0]}" = "${0}" ]
+then
+    case "${1}" in
+        --help)
+            usage
+            ;;
+        *)
+            echo -e "\e[32m[pgsockets4s] Starting API service\e[0m"
+            bloop run application --args serve
+            ;;
+    esac
+fi

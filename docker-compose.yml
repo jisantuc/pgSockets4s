@@ -1,19 +1,16 @@
-version: "2.4"
+version: '2.3'
 services:
   database:
     image: quay.io/azavea/postgis:2.3-postgres9.6-slim
-    volumes:
-      - ./data/:/tmp/data/
-    ports:
-      - 5432:5432
     environment:
-      - POSTGRES_USER=pgsockets
-      - POSTGRES_PASSWORD=pgsockets
-      - POSTGRES_DB=pgsockets
+      - POSTGRES_USER=pgsockets4s
+      - POSTGRES_PASSWORD=pgsockets4s
+      - POSTGRES_DB=pgsockets4s
+    ports:
+      - "5432:5432"
     healthcheck:
-      test: ["CMD", "pg_isready", "-U", "pgsockets"]
+      test: ["CMD", "pg_isready", "-U", "pgsockets4s"]
       interval: 3s
       timeout: 3s
       retries: 3
       start_period: 5s
-

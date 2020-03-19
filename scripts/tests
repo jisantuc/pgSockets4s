@@ -1,0 +1,30 @@
+#! /bin/bash
+
+set -e
+
+if [[ -n "${PGSOCKETS4S_DEBUG}" ]]; then
+    set -x
+fi
+
+function usage() {
+    echo -ne \
+         "Usage: $(basename "${0}")
+Run linters and tests.
+"
+}
+
+
+if [ "${BASH_SOURCE[0]}" = "${0}" ]; then
+    case "${1}" in
+        --help)
+            usage
+            ;;
+        *)
+            echo -e "\e[32m[pgsockets4s] Execute Scalafix\e[0m"
+            sbt "scalafix --check"
+
+            echo -e "\e[32m[pgsockets4s] Execute Scala tests\e[0m"
+            bloop test application
+            ;;
+    esac
+fi

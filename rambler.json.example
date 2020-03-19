@@ -3,9 +3,9 @@
   "protocol": "tcp",
   "host": "localhost",
   "port": 5432,
-  "user": "pgsockets",
-  "password": "pgsockets",
-  "database": "pgsockets",
+  "user": "pgsockets4s",
+  "password": "pgsockets4s",
+  "database": "pgsockets4s",
   "directory": "./migrations",
   "table": "migrations"
 }
