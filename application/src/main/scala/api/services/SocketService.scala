@@ -3,12 +3,13 @@ package com.azavea.pgsockets4s.api.services
 import cats.effect._
 import fs2._
 import org.http4s._
-import org.http4s.implicits._
 import org.http4s.dsl.Http4sDsl
+import org.http4s.implicits._
 import org.http4s.server.blaze.BlazeServerBuilder
 import org.http4s.server.websocket._
 import org.http4s.websocket.WebSocketFrame
 import org.http4s.websocket.WebSocketFrame._
+
 import scala.concurrent.duration._
 
 class SocketService[F[_]](implicit F: ConcurrentEffect[F], timer: Timer[F]) extends Http4sDsl[F] {
@@ -35,6 +36,7 @@ class SocketService[F[_]](implicit F: ConcurrentEffect[F], timer: Timer[F]) exte
 }
 
 object SocketService {
+
   def apply[F[_]: ConcurrentEffect: Timer]: SocketService[F] =
     new SocketService[F]
 }

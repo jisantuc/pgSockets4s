@@ -1,9 +1,10 @@
 package com.azavea.pgsockets4s.api
 
-import cats.effect._
-import cats.implicits._
 import com.azavea.pgsockets4s.api.commands.{Commands}
 import com.azavea.pgsockets4s.api.services.SocketService
+
+import cats.effect._
+import cats.implicits._
 import org.http4s.implicits._
 import org.http4s.server.blaze._
 import org.http4s.server.middleware._
