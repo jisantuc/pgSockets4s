@@ -1,63 +1,45 @@
 package com.azavea.pgsockets4s.api.commands
 
-import cats.implicits._
-import com.monovore.decline.Opts
-import cats.effect._
-import doobie.util.transactor.Transactor
-import doobie.implicits._
-import com.lightbend.emoji.ShortCodes.Implicits._
-import com.lightbend.emoji.ShortCodes.Defaults._
-import com.monovore.decline._
 import eu.timepit.refined.types.numeric._
-import com.monovore.decline.refined._
 
-import scala.util.Try
+case class DatabaseOptions(
+    databasePort: PosInt,
+    databaseHost: String,
+    databaseName: String,
+    databasePassword: String,
+    databaseUser: String
+)
 
-trait DatabaseOptions {
+object DatabaseOptions {
 
-  private val databasePort = Opts
-    .option[PosInt]("db-port", help = "Port to connect to database on")
-    .withDefault(PosInt(5432))
-
-  private val databaseHost = Opts
-    .option[String]("db-host", help = "Database host to connect to")
-    .withDefault("localhost")
-
-  private val databaseName = Opts
-    .option[String]("db-name", help = "Database name to connect to")
-    .withDefault("pgsockets4s")
-
-  private val databasePassword = Opts
-    .option[String]("db-password", help = "Database password to use")
-    .withDefault("pgsockets4s")
-
-  private val databaseUser = Opts
-    .option[String]("db-user", help = "User to connect with database with")
-    .withDefault("pgsockets4s")
-
-  def databaseConfig(
-      implicit contextShift: ContextShift[IO]): Opts[DatabaseConfig] =
-    ((
-      databaseUser,
-      databasePassword,
-      databaseHost,
-      databasePort,
-      databaseName
-    ) mapN DatabaseConfig).validate(
-      e":boom: Unable to connect to database - please ensure database is configured and listening at entered port"
-    ) { config =>
-      val xa =
-        Transactor
-          .fromDriverManager[IO](config.driver,
-                                 config.jdbcUrl,
-                                 config.dbUser,
-                                 config.dbPass)
-      val select = Try {
-        fr"SELECT 1".query[Int].unique.transact(xa).unsafeRunSync()
-      }
-      select.toEither match {
-        case Right(_) => true
-        case Left(_)  => false
-      }
-    }
+  def default: DatabaseOptions = DatabaseOptions(
+    PosInt(5432),
+    "localhost",
+    "pgsockets4s",
+    "pgsockets4s",
+    "pgsockets4s"
+  )
 }
+
+// def databaseConfig(implicit contextShift: ContextShift[IO]): Opts[DatabaseConfig] =
+//     ((
+//       databaseUser,
+//       databasePassword,
+//       databaseHost,
+//       databasePort,
+//       databaseName
+//     ) mapN DatabaseConfig).validate(
+//       e":boom: Unable to connect to database - please ensure database is configured and listening at entered port"
+//     ) { config =>
+//       val xa =
+//         Transactor
+//           .fromDriverManager[IO](config.driver, config.jdbcUrl, config.dbUser, config.dbPass)
+//       val select = Try {
+//         fr"SELECT 1".query[Int].unique.transact(xa).unsafeRunSync()
+//       }
+//       select.toEither match {
+//         case Right(_) => true
+//         case Left(_)  => false
+//       }
+//     }
+// }
