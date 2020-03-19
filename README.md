@@ -1,4 +1,4 @@
-# pg-sockets-hs
+# pgSockets4s
 
 ## Setup
 
