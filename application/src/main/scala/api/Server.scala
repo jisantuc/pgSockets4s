@@ -3,7 +3,7 @@ package com.azavea.pgsockets4s.api
 import cats.effect._
 import cats.implicits._
 import com.azavea.pgsockets4s.api.commands.{Commands}
-import com.azavea.pgsockets4s.api.services.HelloRoutes
+import com.azavea.pgsockets4s.api.services.SocketService
 import org.http4s.implicits._
 import org.http4s.server.blaze._
 import org.http4s.server.middleware._
@@ -18,13 +18,13 @@ object Server extends IOApp {
       router = CORS(
         Router(
           "/api" -> ResponseLogger
-            .httpRoutes(false, false)(HelloRoutes.helloRoutes)
+            .httpRoutes(false, false)(SocketService[IO].routes)
         )
-      )
+      ).orNotFound
       server <- {
         BlazeServerBuilder[IO]
           .bindHttp(8080, "0.0.0.0")
-          .withHttpApp(router.orNotFound)
+          .withHttpApp(router)
           .resource
       }
     } yield {
