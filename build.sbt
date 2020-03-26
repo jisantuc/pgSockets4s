@@ -14,6 +14,7 @@ val LogbackVersion    = "1.2.3"
 val PureConfigVersion = "0.12.1"
 val RefinedVersion    = "0.9.3"
 val ScapegoatVersion  = "1.3.8"
+val SkunkVersion      = "0.0.7"
 val Specs2Version     = "4.6.0"
 
 // Dependencies
@@ -33,6 +34,7 @@ val logbackClassic = "ch.qos.logback"        % "logback-classic"      % LogbackV
 val pureConfig     = "com.github.pureconfig" %% "pureconfig"          % PureConfigVersion
 val refined        = "eu.timepit"            %% "refined"             % RefinedVersion
 val refinedCats    = "eu.timepit"            %% "refined-cats"        % RefinedVersion
+val skunk          = "org.tpolecat"          %% "skunk-core"          % SkunkVersion
 val specs2Core     = "org.specs2"            %% "specs2-core"         % Specs2Version % "test"
 
 // Enable a basic import sorter -- rules are defined in .scalafix.conf
@@ -95,7 +97,8 @@ lazy val dependencies = Seq(
   log4cats,
   pureConfig,
   refined,
-  refinedCats
+  refinedCats,
+  skunk
 )
 
 lazy val application = (project in file("application"))

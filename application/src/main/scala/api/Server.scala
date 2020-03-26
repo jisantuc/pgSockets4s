@@ -1,25 +1,34 @@
 package com.azavea.pgsockets4s.api
 
-import com.azavea.pgsockets4s.api.commands.{Commands}
+import com.azavea.pgsockets4s.api.commands.{Commands, DatabaseOptions}
 import com.azavea.pgsockets4s.api.services.SocketService
 
 import cats.effect._
 import cats.implicits._
+import natchez.Trace.Implicits._
 import org.http4s.implicits._
 import org.http4s.server.blaze._
 import org.http4s.server.middleware._
 import org.http4s.server.{Router, Server => HTTP4sServer}
+import skunk.Session
 
 object Server extends IOApp {
 
+  val dbOptions = DatabaseOptions.default
+
   private def createServer: Resource[IO, HTTP4sServer[IO]] =
     for {
-      s <- Resource.liftF { IO.pure { "hey" } }
-      _ = println(s)
+      session <- Session.pooled[IO](
+        host = dbOptions.databaseHost,
+        user = dbOptions.databaseUser,
+        password = Some(dbOptions.databasePassword),
+        database = dbOptions.databaseName,
+        max = 10
+      )
       router = CORS(
         Router(
           "/api" -> ResponseLogger
-            .httpRoutes(false, false)(SocketService[IO].routes)
+            .httpRoutes(false, false)(SocketService[IO](session).routes)
         )
       ).orNotFound
       server <- {
