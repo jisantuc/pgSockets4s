@@ -2,6 +2,8 @@
 
 An API project that uses `skunk` and `http4s` to serve Postgres notifications over websockets.
 
+![](./assets/notify.gif)
+
 ### Development
 
 The following tools must be present for a development environment:
