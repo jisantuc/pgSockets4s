@@ -1,5 +1,7 @@
 package com.azavea.pgsockets4s.api.services
 
+import com.azavea.pgsockets4s.datamodel.City
+
 import cats.effect._
 import cats.implicits._
 import fs2._
@@ -11,7 +13,9 @@ import org.http4s.server.websocket._
 import org.http4s.websocket.WebSocketFrame
 import org.http4s.websocket.WebSocketFrame._
 import skunk.data.Identifier
-import skunk.Session
+import skunk._
+import skunk.codec.all._
+import skunk.implicits._
 
 class SocketService[F[_]](sessionResource: Resource[F, Session[F]])(
     implicit F: ConcurrentEffect[F],
@@ -21,6 +25,20 @@ class SocketService[F[_]](sessionResource: Resource[F, Session[F]])(
   def routes: HttpRoutes[F] = HttpRoutes.of[F] {
     case GET -> Root / "hello" =>
       Ok("Hello world.")
+
+    case POST -> Root / "city" =>
+      val city = City.random
+      val cmd  = sql"""insert into city (id, name, countrycode, district, population)
+            values ($int4, $varchar, $varchar, $varchar, $int4);
+      """.command.contramap((c: City) => c.id ~ c.name ~ c.countryCode ~ c.district ~ c.population)
+      sessionResource.use(
+        session =>
+          session.prepare(cmd).use { pc =>
+            pc.execute(city)
+          }
+      ) flatMap { _ =>
+        Ok()
+      }
 
     case GET -> Root / "ws" / channelName =>
       def toClient(session: Session[F]): Stream[F, WebSocketFrame] =
