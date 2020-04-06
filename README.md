@@ -14,6 +14,16 @@ The following tools must be present for a development environment:
 - [Bloop](https://scalacenter.github.io/bloop/) -- this is a scala build server that should run in the background for building the project; installation instructions can be found [here](https://scalacenter.github.io/bloop/setup)
 - [rambler](https://github.com/elwinar/rambler) -- a cross-platform migration runner
 
+### Setting up the project for the first time
+
+_tl;dr_:
+
+- `docker-compose up -d`
+- `./scripts/load-development-data` -- the default password for development can be found in `docker-compose.yml`
+- `bloop run application -- serve`
+- (in another terminal) `websocat ws://localhost:8080/api/ws/prt`
+- (in still _another_ terminal), `curl -X POST localhost:8080/api/city` a few times, until you get lucky and your new city is in Portugal (it has an equal chance of Portugal, Kenya, or China)
+
 ### STRTA
 
 This project uses [`scripts-to-rule-them-all`](https://github.blog/2015-06-30-scripts-to-rule-them-all/) for managing the developer experience. Below is a quick explanation for the specific usage of each for this particular project.
