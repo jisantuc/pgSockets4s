@@ -22,11 +22,14 @@ function copy_rambler() {
 }
 
 function setup_db() {
+    echo "Removing existing db"
+    docker-compose stop
+    docker-compose rm -f database
     docker-compose up -d database
     echo "Sleeping for a sec to give the database time to wake up"
     sleep 5
     PGPASSWORD=pgsockets4s ./scripts/load-development-data
-    ./scripts/migrate apply
+    ./scripts/migrate apply -a
 }
 
 function start_server() {
