@@ -1,0 +1,53 @@
+#!/bin/bash
+
+set -e
+
+if [[ -n "${PGSOCKETS4S_DEBUG}" ]]; then
+    set -x
+fi
+
+function usage() {
+    echo -ne \
+         "Usage: $(basename "${0}")
+Load a development database, build the app, and start the server.
+"
+}
+
+function copy_rambler() {
+    if test -f rambler.json; then
+	echo "rambler.json already exists, doing nothing"
+    else
+	cp rambler.json.example rambler.json
+    fi
+}
+
+function setup_db() {
+    docker-compose up -d database
+    echo "Sleeping for a sec to give the database time to wake up"
+    sleep 5
+    PGPASSWORD=pgsockets4s ./scripts/load-development-data
+    ./scripts/migrate apply
+}
+
+function start_server() {
+    ./scripts/server
+}
+
+
+if [ "${BASH_SOURCE[0]}" = "${0}" ]; then
+    case "${1}" in
+        --help)
+            usage
+            ;;
+        *)
+            echo -e "\e[32m[pgsockets4s] Copying default rambler settings\e[0m"
+	    copy_rambler
+	    
+            echo -e "\e[32m[pgsockets4s] Setting up database\e[0m"
+	    setup_db
+
+            echo -e "\e[32m[pgsockets4s] Starting application\e[0m"
+            start_server
+
+    esac
+fi
