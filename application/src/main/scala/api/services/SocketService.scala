@@ -12,9 +12,9 @@ import org.http4s.server.blaze.BlazeServerBuilder
 import org.http4s.server.websocket._
 import org.http4s.websocket.WebSocketFrame
 import org.http4s.websocket.WebSocketFrame._
-import skunk.data.Identifier
 import skunk._
 import skunk.codec.all._
+import skunk.data.Identifier
 import skunk.implicits._
 
 class SocketService[F[_]](sessionResource: Resource[F, Session[F]])(
@@ -35,7 +35,7 @@ class SocketService[F[_]](sessionResource: Resource[F, Session[F]])(
         session =>
           session.prepare(cmd).use { pc =>
             pc.execute(city)
-          }
+        }
       ) flatMap { _ =>
         Ok()
       }

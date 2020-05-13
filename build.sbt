@@ -2,40 +2,44 @@ cancelable in Global := true
 onLoad in Global ~= (_ andThen ("project application" :: _))
 
 import sbt._
+import explicitdeps.ExplicitDepsPlugin.autoImport.moduleFilterRemoveValue
 
 // Versions
+val CatsEffectVersion = "2.1.1"
+val CatsVersion       = "2.1.0"
 val CirceFs2Version   = "0.13.0"
 val CirceVersion      = "0.13.0"
 val DeclineVersion    = "0.6.2"
 val EmojiVersion      = "1.2.1"
+val Fs2Version        = "2.2.2"
 val Http4sVersion     = "0.21.1"
-val Log4CatsVersion   = "0.3.0"
 val LogbackVersion    = "1.2.3"
-val PureConfigVersion = "0.12.1"
+val NatchezVersion    = "0.0.10"
 val RefinedVersion    = "0.9.3"
 val ScapegoatVersion  = "1.3.8"
+val ShapelessVersion  = "2.3.3"
 val SkunkVersion      = "0.0.7"
 val Specs2Version     = "4.6.0"
 
 // Dependencies
-val circeCore      = "io.circe"              %% "circe-core"          % CirceVersion
-val circeFs2       = "io.circe"              %% "circe-fs2"           % CirceFs2Version
-val circeGeneric   = "io.circe"              %% "circe-generic"       % CirceVersion
-val circeRefined   = "io.circe"              %% "circe-refined"       % CirceVersion
-val decline        = "com.monovore"          %% "decline"             % DeclineVersion
-val declineRefined = "com.monovore"          %% "decline-refined"     % DeclineVersion
-val emoji          = "com.lightbend"         %% "emoji"               % EmojiVersion
-val http4s         = "org.http4s"            %% "http4s-blaze-server" % Http4sVersion
-val http4sCirce    = "org.http4s"            %% "http4s-circe"        % Http4sVersion
-val http4sDsl      = "org.http4s"            %% "http4s-dsl"          % Http4sVersion
-val http4sServer   = "org.http4s"            %% "http4s-blaze-server" % Http4sVersion
-val log4cats       = "io.chrisdavenport"     %% "log4cats-slf4j"      % Log4CatsVersion
-val logbackClassic = "ch.qos.logback"        % "logback-classic"      % LogbackVersion
-val pureConfig     = "com.github.pureconfig" %% "pureconfig"          % PureConfigVersion
-val refined        = "eu.timepit"            %% "refined"             % RefinedVersion
-val refinedCats    = "eu.timepit"            %% "refined-cats"        % RefinedVersion
-val skunk          = "org.tpolecat"          %% "skunk-core"          % SkunkVersion
-val specs2Core     = "org.specs2"            %% "specs2-core"         % Specs2Version % "test"
+val catsCore          = "org.typelevel"  %% "cats-core"           % CatsVersion
+val catsEffect        = "org.typelevel"  %% "cats-effect"         % CatsEffectVersion
+val circeCore         = "io.circe"       %% "circe-core"          % CirceVersion
+val circeFs2          = "io.circe"       %% "circe-fs2"           % CirceFs2Version
+val circeGeneric      = "io.circe"       %% "circe-generic"       % CirceVersion
+val decline           = "com.monovore"   %% "decline"             % DeclineVersion
+val fs2               = "co.fs2"         %% "fs2-core"            % Fs2Version
+val http4sBlazeServer = "org.http4s"     %% "http4s-blaze-server" % Http4sVersion
+val http4sCore        = "org.http4s"     %% "http4s-core"         % Http4sVersion
+val http4sDsl         = "org.http4s"     %% "http4s-dsl"          % Http4sVersion
+val http4sServer      = "org.http4s"     %% "http4s-server"       % Http4sVersion
+val logbackClassic    = "ch.qos.logback" % "logback-classic"      % LogbackVersion % "runtime"
+val natchez           = "org.tpolecat"   %% "natchez-core"        % NatchezVersion
+val refined           = "eu.timepit"     %% "refined"             % RefinedVersion
+val shapeless         = "com.chuusai"    %% "shapeless"           % ShapelessVersion
+val skunk             = "org.tpolecat"   %% "skunk-core"          % SkunkVersion
+val skunkMacros       = "org.tpolecat"   %% "skunk-macros"        % SkunkVersion
+val specs2Core        = "org.specs2"     %% "specs2-core"         % Specs2Version % "test"
 
 // Enable a basic import sorter -- rules are defined in .scalafix.conf
 scalafixDependencies in ThisBuild +=
@@ -78,27 +82,31 @@ lazy val settings = Seq(
     Resolver.file("local", file(Path.userHome.absolutePath + "/.ivy2/local"))(
       Resolver.ivyStylePatterns
     )
-  )
+  ),
+  unusedCompileDependenciesFilter -= moduleFilter(
+    "com.sksamuel.scapegoat",
+    "scalac-scapegoat-plugin"
+  ),
 )
 
 lazy val dependencies = Seq(
-  specs2Core,
-  logbackClassic,
+  catsCore,
+  catsEffect,
   circeCore,
   circeGeneric,
-  circeRefined,
   decline,
-  declineRefined,
-  emoji,
-  http4s,
-  http4sCirce,
+  fs2,
+  http4sCore,
+  http4sBlazeServer,
   http4sDsl,
   http4sServer,
-  log4cats,
-  pureConfig,
+  logbackClassic,
+  natchez,
   refined,
-  refinedCats,
-  skunk
+  shapeless,
+  skunk,
+  skunkMacros,
+  specs2Core
 )
 
 lazy val application = (project in file("application"))

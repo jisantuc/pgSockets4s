@@ -21,7 +21,7 @@ if [ "${BASH_SOURCE[0]}" = "${0}" ]; then
             ;;
         *)
             echo -e "\e[32m[pgsockets4s] Execute Scalafix\e[0m"
-            sbt "scalafix --check"
+            ./sbt ";scalafix --check;unusedCompileDependenciesTest;undeclaredCompileDependenciesTest"
 
             echo -e "\e[32m[pgsockets4s] Execute Scala tests\e[0m"
             bloop test application
