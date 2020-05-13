@@ -4,6 +4,10 @@ An API project that uses `skunk` and `http4s` to serve Postgres notifications ov
 
 ![](./assets/notify.gif)
 
+This project was bootstrapped with [`azavea.g8`](https://github.com/azavea/azavea.g8), a
+[giter8 template](https://github.com/foundweekends/giter8) for creating applications on the
+Typelevel stack.
+
 ### Development
 
 The following tools must be present for a development environment:
@@ -18,11 +22,10 @@ The following tools must be present for a development environment:
 
 _tl;dr_:
 
-- `docker-compose up -d`
-- `./scripts/load-development-data` -- the default password for development can be found in `docker-compose.yml`
-- `bloop run application -- serve`
+- make sure you have `rambler`, `docker-compose`, and `bloop` installed
+- `./scripts/easy-start` -- this will set up the database with the world database from the [`doobie`](https://tpolecat.github.io/doobie/docs/01-Introduction.html#sample-database-setup) docs, apply migrations to add notifications for new cities, and start the application
 - (in another terminal) `websocat ws://localhost:8080/api/ws/prt`
-- (in still _another_ terminal), `curl -X POST localhost:8080/api/city` a few times, until you get lucky and your new city is in Portugal (it has an equal chance of Portugal, Kenya, or China)
+- (in still _another_ terminal), `curl -X POST localhost:8080/api/city` a few times, until you get lucky and your new city is in Portugal (it has an equal chance of being in Portugal, Kenya, or China)
 
 ### STRTA
 
