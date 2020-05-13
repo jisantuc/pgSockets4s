@@ -7,8 +7,6 @@ import explicitdeps.ExplicitDepsPlugin.autoImport.moduleFilterRemoveValue
 // Versions
 val CatsEffectVersion = "2.1.1"
 val CatsVersion       = "2.1.0"
-val CirceFs2Version   = "0.13.0"
-val CirceVersion      = "0.13.0"
 val DeclineVersion    = "0.6.2"
 val EmojiVersion      = "1.2.1"
 val Fs2Version        = "2.2.2"
@@ -24,16 +22,13 @@ val Specs2Version     = "4.6.0"
 // Dependencies
 val catsCore          = "org.typelevel"  %% "cats-core"           % CatsVersion
 val catsEffect        = "org.typelevel"  %% "cats-effect"         % CatsEffectVersion
-val circeCore         = "io.circe"       %% "circe-core"          % CirceVersion
-val circeFs2          = "io.circe"       %% "circe-fs2"           % CirceFs2Version
-val circeGeneric      = "io.circe"       %% "circe-generic"       % CirceVersion
 val decline           = "com.monovore"   %% "decline"             % DeclineVersion
 val fs2               = "co.fs2"         %% "fs2-core"            % Fs2Version
 val http4sBlazeServer = "org.http4s"     %% "http4s-blaze-server" % Http4sVersion
 val http4sCore        = "org.http4s"     %% "http4s-core"         % Http4sVersion
 val http4sDsl         = "org.http4s"     %% "http4s-dsl"          % Http4sVersion
 val http4sServer      = "org.http4s"     %% "http4s-server"       % Http4sVersion
-val logbackClassic    = "ch.qos.logback" % "logback-classic"      % LogbackVersion % "runtime"
+val logbackClassic    = "ch.qos.logback" % "logback-classic"      % LogbackVersion
 val natchez           = "org.tpolecat"   %% "natchez-core"        % NatchezVersion
 val refined           = "eu.timepit"     %% "refined"             % RefinedVersion
 val shapeless         = "com.chuusai"    %% "shapeless"           % ShapelessVersion
@@ -87,13 +82,15 @@ lazy val settings = Seq(
     "com.sksamuel.scapegoat",
     "scalac-scapegoat-plugin"
   ),
+  unusedCompileDependenciesFilter -= moduleFilter(
+    "ch.qos.logback",
+    "logback-classic"
+  ),
 )
 
 lazy val dependencies = Seq(
   catsCore,
   catsEffect,
-  circeCore,
-  circeGeneric,
   decline,
   fs2,
   http4sCore,
